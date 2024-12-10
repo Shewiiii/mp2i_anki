@@ -1,6 +1,5 @@
 import os
 import google.generativeai as genai
-import typing
 import json
 from typing import TypedDict, List, Dict
 from dotenv import load_dotenv
@@ -27,13 +26,13 @@ class DataSchema(TypedDict):
 
 
 class Data(TypedDict):
-    data: List[DataSchema]
+    data: list[DataSchema]
 
 
 extract_data_string = '''
 - Extract all formulas or properties to remember from the text of ALL pages.
 - Use *MathJax equation code in TeX format* if it's a mathematical formula.
-Wrap theses expressions in \\[...\\].
+  Always wrap these expressions in \\[...\\].
 - Provide the output as a json:
 [{{"data":
     [
@@ -74,7 +73,7 @@ class Hibiki:
 
         return unique_data
 
-    def normalize_data(self, dicts: List[str]) -> dict:
+    def normalize_data(self, dicts: list[dict]) -> dict:
         """Combine data dicts and remove duplicates"""
         combined_dict = {'data': []}
         for json_string in dicts:
