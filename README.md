@@ -15,9 +15,14 @@ This repo has been created to help me reviewing my lessons. ( ^^) _旦~~
 ```bash
 python -m venv venv
 ```
+- Activate the venv
 - Install the depedencies.
 ```bash
 pip install -r requirements.txt
 ```
 - Create a .env file from the template, pass your Gemini API Key.
-- ...
+- Change the file_path variable in main.py
+- Run main.py
+```bash 
+python main.py
+```

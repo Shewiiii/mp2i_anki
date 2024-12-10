@@ -57,7 +57,6 @@ class AnkiDeck:
             logging.info(
                 f"Adding note - Name: {formula_dict['name']}, Value: {formula_dict['value']}")
 
-            # Replace Unicode characters with LaTeX commands
             name_latex = formula_dict['name']
             value_latex = formula_dict['value']
 

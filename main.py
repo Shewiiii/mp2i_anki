@@ -3,18 +3,21 @@ from gemini_utils import Hibiki
 from anki_utils import AnkiDeck
 from pathlib import Path
 import logging
+import asyncio
 
+# Your document path here:
+file_path = "cours/chapM3-energie_mecanique.pdf"
 
 async def app():
     hibiki = Hibiki()
-    pdf_path = Path('cours/Chapitre 18 _ Arithmétique dans Z.pdf')
-    pdf_name = pdf_path.stem
+    path = Path(file_path)
+    file_name = path.stem
 
     # Extract data from the PDF
     try:
         logging.info(
-            f"Extracting data from {pdf_name}. This can take a while.")
-        formulas_dict = await hibiki.extract_data(pdf_path)
+            f"Extracting data from {file_name}. This can take a while.")
+        formulas_dict = await hibiki.extract_data(path)
     except Exception as e:
         logging.error(f"Error extracting data: {e}")
         return
@@ -25,12 +28,11 @@ async def app():
     try:
         deck_path = anki_deck.create(
             formulas_dict,
-            deck_name=pdf_name
+            deck_name=file_name
         )
     except Exception as e:
         logging.error(f"Error creating Anki deck: {e}")
         return
 
 if __name__ == "__main__":
-    # asyncio.run(app())
-    await app()
+    asyncio.run(app())

@@ -32,7 +32,8 @@ class Data(TypedDict):
 
 extract_data_string = '''
 - Extract all formulas or properties to remember from the text of ALL pages.
-- Use *MathJax equation code* if it's a mathematical formula, no LATEX.
+- Use *MathJax equation code in TeX format* if it's a mathematical formula.
+Wrap theses expressions in \\[...\\].
 - Provide the output as a json:
 [{{"data":
     [
@@ -92,7 +93,7 @@ class Hibiki:
 
     async def chat_prompt(
         self,
-        chat: Optional[genai.ChatSession],
+        chat: genai.ChatSession,
         prompt: str = "",
         files: list[genai.types.File] = [],
         response_schema=Data
