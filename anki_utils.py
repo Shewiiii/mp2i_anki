@@ -1,16 +1,15 @@
-# anki_utils.py
-
 import genanki
 from random import randint
 from pathlib import Path
-from typing import Dict
 import logging
+
+from config import OUTPUT_DIR
 
 
 class AnkiDeck:
     def __init__(
         self,
-        output_dir: Path = Path('./generated')
+        output_dir: Path = Path(OUTPUT_DIR)
     ) -> None:
         self.model_id = randint(1000000000, 9999999999)
         self.model = genanki.Model(
@@ -42,28 +41,26 @@ class AnkiDeck:
 
     def create(
         self,
-        formulas_dict: Dict[str, list],
+        entry_list: list[dict],
         deck_name: str = "Generated Deck"
     ) -> Path:
         deck_id = randint(1000000000, 9999999999)
         deck = genanki.Deck(deck_id, deck_name)
-        formulas = formulas_dict.get('data')
-        if not formulas:
+        if not entry_list:
             logging.error('No formula has been found')
             return
 
-        for formula_dict in formulas:
-            # Debug: logging.info each formula and answer
+        for entry_dict in entry_list:
             logging.info(
-                f"Adding note - Name: {formula_dict['name']}, Value: {formula_dict['value']}")
+                f"Adding note - Front: {entry_dict['front']}, Back: {entry_dict['back']}")
 
-            name_latex = formula_dict['name']
-            value_latex = formula_dict['value']
+            front = entry_dict['front']
+            back = entry_dict['back']
 
             # Create the note
             note = genanki.Note(
                 model=self.model,
-                fields=[name_latex, value_latex]
+                fields=[front, back]
             )
             deck.add_note(note)
 

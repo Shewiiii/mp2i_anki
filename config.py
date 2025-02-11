@@ -1,8 +1,11 @@
 import logging
 
-GEMINI_MODEL = 'gemini-1.5-pro'
-GEMINI_UTILS_MODEL = 'gemini-1.5-flash'
-LANGUAGE = 'French'
+# Please use chain-of-thought based models
+GEMINI_MODEL = "gemini-2.0-flash-thinking-exp" # Not available yet, exp version does not support JSON mime type
+LANGUAGE = "French"
+OUTPUT_DIR = "./generated"
+REQUEST_LIMIT = 10 # The max number of Gemini API calls per deck
+MANUAL_REQUEST_LIMIT = 3
 # Logs
 logging.basicConfig(
     level=logging.INFO,
