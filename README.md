@@ -1,5 +1,3 @@
-Only manual import works for now, since Gemini-flash Thinking does not support JSON response mime type yet.
-
 # MP2I Anki
 
 A simple script to create Anki flashcards from a PDF or text file of a lesson.  
