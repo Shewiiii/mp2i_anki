@@ -7,7 +7,7 @@ from config import OUTPUT_DIR, ARTIFACTS_DIR
 
 
 # Your document path here:
-file_path = "cours/Chapitre 29 _ Applications linéaires.pdf"
+file_path = "cours/test.pdf"
 
 anki_deck = AnkiDeck()
 hbk = Hibiki()
