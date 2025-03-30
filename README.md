@@ -3,11 +3,15 @@
 A simple script to create Anki flashcards from a PDF or text file of a lesson.  
 This repo has been created to help me reviewing my lessons. ( ^^) \_旦~~
 
-# Limitations
+## Limitations
 
 - Works best with PDFs: All generative AI models I've tried struggle to extract text from all the pages with a long document. PDFs on the other hand are fragmented before extraction.
 - The model can hallucinate, you may want to create a deck multiple times until you get satisfying results.
 - Only supports plain text for now: really weird things happen when I ask to generate Mathjax or LaTex code.
+
+## Screenshots
+
+![Card example](./img/example.png)
 
 ## Draft setup guide:
 
