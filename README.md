@@ -11,7 +11,9 @@ This repo has been created to help me reviewing my lessons. ( ^^) \_旦~~
 
 ## Screenshots
 
-![Card example](./img/example.png)
+<div align="center">
+<img src="./img/example.png" alt="card example" width="400"/>
+</div>
 
 ## Draft setup guide:
 
