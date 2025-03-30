@@ -1,3 +1,4 @@
 genanki
-google-generativeai
+openai
 python-dotenv
+pypdf

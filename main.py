@@ -1,15 +1,13 @@
-from gemini_utils import Hibiki
 from anki_utils import AnkiDeck
+from hibiki import Hibiki
 from pathlib import Path
 import logging
-import asyncio
 
-# GEMINI FLASH THINKING DOES NOT SUPPORT JSON OUTPUT YET
-# THE FOLLOWING WILL NOT WORK
+from config import OUTPUT_DIR, ARTIFACTS_DIR
 
 
 # Your document path here:
-file_path = "cours/Chapitre 25 _ Polynômes.pdf"
+file_path = "cours/Chapitre 29 _ Applications linéaires.pdf"
 
 anki_deck = AnkiDeck()
 hbk = Hibiki()
@@ -18,25 +16,17 @@ file_name = path.stem
 
 
 def app():
+    # Create the paths
+    Path(OUTPUT_DIR).mkdir(exist_ok=True)
+    Path(ARTIFACTS_DIR).mkdir(exist_ok=True)
+
     # Extract data from the PDF
-    try:
-        logging.info(
-            f"Extracting data from {file_name}. This can take a while.")
-        entry_list = hbk.extract_data(path)
-    except Exception as e:
-        logging.error(f"Error extracting data: {e}")
-        return
-    logging.info(f"Data extraction successful")
+    logging.info(f"Extracting data from {file_name}. This can take a while.")
+    entry_list = hbk.extract_data(path)
+    logging.info("Data extraction successful")
 
     # Create an Anki deck from the extracted data
-    try:
-        deck_path = anki_deck.create(
-            entry_list,
-            deck_name=file_name
-        )
-    except Exception as e:
-        logging.error(f"Error creating Anki deck: {e}")
-        return
+    anki_deck.create(entry_list, deck_name=file_name)
 
 
 if __name__ == "__main__":
