@@ -8,7 +8,7 @@ from openai.types.responses import Response
 from openai.types.file_object import FileObject
 from pathlib import Path
 from pypdf import PdfReader, PdfWriter
-from typing import TypedDict, List
+from typing import List
 
 from config import OPENAI_MODEL, LANGUAGE, ARTIFACTS_DIR
 
@@ -168,7 +168,7 @@ class Hibiki:
 
         return paths
 
-    def chat_prompt(self, prompt: FileObject) -> dict:
+    async def prompt(self, prompt: FileObject) -> dict:
         """Send a prompt to OpenAI's API and return the response dict."""
         input_ = [
             self.system_message,
@@ -182,8 +182,11 @@ class Hibiki:
                 ],
             },
         ]
-        response: Response = self.client.responses.create(
-            model=self.model, input=input_, text=text_schema
+        response: Response = await asyncio.to_thread(
+            self.client.responses.create,
+            model=self.model,
+            input=input_,
+            text=text_schema,
         )
         js: dict = json.loads(response.output_text)
         for card in js.get("data", []):
@@ -192,9 +195,7 @@ class Hibiki:
 
     async def extract_data(self, file_path: Path) -> List[dict]:
         files = await self.read_file(file_path)
-        parts = []
-        for file in files:
-            part: dict = self.chat_prompt(file)
-            parts.append(part)
+        tasks = [self.prompt(file) for file in files]
+        parts = await asyncio.gather(*tasks)
         entry_list = self.normalize_data(parts)
         return entry_list
