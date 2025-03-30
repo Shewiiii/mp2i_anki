@@ -1,13 +1,15 @@
+import asyncio
+from dotenv import load_dotenv
+import json
+import logging
 import os
 from openai import OpenAI
 from openai.types.responses import Response
 from openai.types.file_object import FileObject
-import json
-from typing import TypedDict, List
-from dotenv import load_dotenv
 from pathlib import Path
 from pypdf import PdfReader, PdfWriter
-import logging
+from typing import TypedDict, List
+
 from config import OPENAI_MODEL, LANGUAGE, ARTIFACTS_DIR
 
 
@@ -105,22 +107,26 @@ class Hibiki:
         entry_list = self.remove_duplicates(entry_list)
         return entry_list
 
-    def read_file(self, file_path: Path) -> List[FileObject]:
+    async def read_file(self, file_path: Path) -> List[FileObject]:
         """Read the content of a file and return a list of FileObjects"""
         logging.info(f"File extension: {file_path.suffix}")
         # PDF
         files = []
         if isinstance(file_path, Path) and file_path.suffix == ".pdf":
             paths = self.fragment_pdf(file_path)
-            for path in paths:
-                file: FileObject = self.client.files.create(
-                    file=open(path, "rb"), purpose="user_data"
+            tasks = [
+                asyncio.to_thread(
+                    self.client.files.create, file=open(path, "rb"), purpose="user_data"
                 )
-                files.append(file)
+                for path in paths
+            ]
+            files = await asyncio.gather(*tasks)
         else:
             logging.warning("Many flashcards may be missing with long documents")
-            file: FileObject = self.client.files.create(
-                file=open(file_path, "rb"), purpose="user_data"
+            file: FileObject = await asyncio.to_thread(
+                self.client.files.create,
+                file=open(file_path, "rb"),
+                purpose="user_data",
             )
             files.append(file)
 
@@ -128,7 +134,6 @@ class Hibiki:
 
     def fragment_pdf(self, file_path: Path) -> list:
         """Fragment a pdf into multiple files."""
-        # Upload could have been speed up using an async method but I'm lazy turning everything async
         paths = []
         if not isinstance(file_path, Path) or not file_path.suffix == ".pdf":
             ValueError("Not a PDF.")
@@ -182,11 +187,11 @@ class Hibiki:
         )
         js: dict = json.loads(response.output_text)
         for card in js.get("data", []):
-            logging.info(f"Response, front: {card.get('front')}")
+            logging.info(f"response, front: {card.get('front')}")
         return js
 
-    def extract_data(self, file_path: Path) -> List[dict]:
-        files = self.read_file(file_path)
+    async def extract_data(self, file_path: Path) -> List[dict]:
+        files = await self.read_file(file_path)
         parts = []
         for file in files:
             part: dict = self.chat_prompt(file)
