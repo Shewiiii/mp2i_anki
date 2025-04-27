@@ -22,7 +22,9 @@ if not OPENAI_API_KEY:
 extract_data_string = f"""
 - Write in {LANGUAGE}.
 - Extract all formulas or properties to remember from the text of all the pages.
-- Never use Mathjax or LaTeX, always write in plain text
+- For maths equations or formulas, always use Mathjax in Tex format for Anki.
+Anki uses \\( and \\) for inline equations, and \\[ and \\] for display equations.
+Double check if the Mathjax is valid.
 - Provide the output as a JSON:
 {{
     "data": [

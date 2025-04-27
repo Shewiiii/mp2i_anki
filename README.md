@@ -7,7 +7,6 @@ This repo has been created to help me reviewing my lessons. ( ^^) \_旦~~
 
 - Works best with PDFs: All generative AI models I've tried struggle to extract text from all the pages with a long document. PDFs on the other hand are fragmented before extraction.
 - The model can hallucinate, you may want to create a deck multiple times until you get satisfying results.
-- Only supports plain text for now: really weird things happen when I ask to generate Mathjax or LaTex code.
 
 ## Screenshots
 
@@ -35,7 +34,8 @@ python -m venv venv
 (Try python3 instead of python if python is not found)
 
 - Activate the venv
-  Windows:
+
+Windows:
 
 ```bash
 ./venv/Scripts/activate.bat
@@ -47,7 +47,7 @@ Linux:
 source venv/bin/activate
 ```
 
-- Install the depedencies.
+- Install the dependencies.
 
 ```bash
 pip install -r requirements.txt
