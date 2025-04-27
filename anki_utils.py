@@ -5,14 +5,14 @@ import logging
 
 from config import OUTPUT_DIR
 from theme import fields, qfmt, afmt, css
+from time import time
 
 
 class AnkiDeck:
     def __init__(self, output_dir: Path = Path(OUTPUT_DIR)) -> None:
-        self.model_id = randint(1000000000, 9999999999)
         self.model = genanki.Model(
-            model_id=self.model_id,
-            name="Simple Model with LaTeX",
+            model_id=520,
+            name="Simple Model with Mathjax",
             fields=fields,
             templates=[
                 {
@@ -47,7 +47,7 @@ class AnkiDeck:
             note = genanki.Note(model=self.model, fields=[front, back, tags, reference])
             deck.add_note(note)
 
-        output_file = f"{deck_id}.apkg"
+        output_file = f"{deck_name}_{int(time())}.apkg"
         output_path = self.output_dir / output_file
         genanki.Package(deck).write_to_file(output_path)
         logging.info(f"Deck saved to {output_path}")
