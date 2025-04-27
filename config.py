@@ -2,8 +2,8 @@ import logging
 import sys
 
 # The model MUST support both image and text input.
-OPENAI_MODEL = "gpt-4o-mini-2024-07-18"
-LANGUAGE = "French"
+OPENAI_MODEL = "gpt-4.1-2025-04-14"
+LANGUAGE = "English"
 OUTPUT_DIR = "./generated"
 ARTIFACTS_DIR = "./artifacts"
 MANUAL_REQUEST_LIMIT = 3
