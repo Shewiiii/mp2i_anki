@@ -8,7 +8,7 @@ from openai.types.responses import Response
 from openai.types.file_object import FileObject
 from pathlib import Path
 from pypdf import PdfReader, PdfWriter
-from typing import List
+from typing import List, Optional
 
 from config import OPENAI_MODEL, LANGUAGE, ARTIFACTS_DIR
 
@@ -170,8 +170,12 @@ class Hibiki:
 
         return paths
 
-    async def prompt(self, prompt: FileObject) -> dict:
+    async def prompt(self, prompt: FileObject, extra_prompt: Optional[str] = "") -> dict:
         """Send a prompt to OpenAI's API and return the response dict."""
+        self.system_message["content"] = (
+            f"{self.system_message['content']}\n{extra_prompt}"
+        )
+
         input_ = [
             self.system_message,
             {
@@ -196,8 +200,9 @@ class Hibiki:
         return js
 
     async def extract_data(self, file_path: Path) -> List[dict]:
+        extra_prompt = input("(Optional) Add more details about what you want here:")
         files = await self.read_file(file_path)
-        tasks = [self.prompt(file) for file in files]
+        tasks = [self.prompt(file, extra_prompt) for file in files]
         parts = await asyncio.gather(*tasks)
         entry_list = self.normalize_data(parts)
         return entry_list
